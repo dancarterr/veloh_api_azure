@@ -1,6 +1,164 @@
 {
 	"name": "veloh_rawdata_extract",
 	"properties": {
+		"activities": [
+			{
+				"name": "Extract data from API",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"paginationRules": {
+							"supportRFC5988": "true"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings",
+							"filePattern": "arrayOfObjects"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['number']"
+								},
+								"sink": {
+									"path": "$['number']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['contract_name']"
+								},
+								"sink": {
+									"path": "$['contract_name']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['name']"
+								},
+								"sink": {
+									"path": "$['name']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['address']"
+								},
+								"sink": {
+									"path": "$['address']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['position']['lat']"
+								},
+								"sink": {
+									"path": "$['position']['lat']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['position']['lng']"
+								},
+								"sink": {
+									"path": "$['position']['lng']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['banking']"
+								},
+								"sink": {
+									"path": "$['banking']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['bonus']"
+								},
+								"sink": {
+									"path": "$['bonus']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['bike_stands']"
+								},
+								"sink": {
+									"path": "$['bike_stands']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['available_bike_stands']"
+								},
+								"sink": {
+									"path": "$['available_bike_stands']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['available_bikes']"
+								},
+								"sink": {
+									"path": "$['available_bikes']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['status']"
+								},
+								"sink": {
+									"path": "$['status']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['last_update']"
+								},
+								"sink": {
+									"path": "$['last_update']"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "veloh_api_rest_ressource",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "json_veloh_rest",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
 		"annotations": []
 	}
 }

@@ -1,0 +1,20 @@
+{
+	"name": "json_veloh_rest",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "blob_veloh",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "veloh_extract.json",
+				"folderPath": "restveloh",
+				"container": "sfeirstorage"
+			}
+		},
+		"schema": {}
+	}
+}
