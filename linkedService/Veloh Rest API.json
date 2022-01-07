@@ -1,0 +1,12 @@
+{
+	"name": "Veloh Rest API",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://api.jcdecaux.com/vls/v1/stations?apiKey=33a792c68888383c3eaa4b96a3c6678a798a9dd3",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
