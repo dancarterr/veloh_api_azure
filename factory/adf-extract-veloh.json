@@ -1,0 +1,9 @@
+{
+	"name": "adf-extract-veloh",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "2550e7c1-282c-4e39-b011-837090d5360a",
+		"tenantId": "0bfce6b5-cf85-4dfd-98ac-813dd7557140"
+	}
+}
