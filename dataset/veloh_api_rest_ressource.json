@@ -1,0 +1,12 @@
+{
+	"name": "veloh_api_rest_ressource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Veloh Rest API",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
