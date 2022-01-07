@@ -1,19 +1,13 @@
 {
 	"name": "Veloh Rest API",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "https://api.jcdecaux.com/vls/v1/stations?apiKey=33a792c68888383c3eaa4b96a3c6678a798a9dd3",
+			"url": "https://api.jcdecaux.com/vls/v1/stations",
 			"enableServerCertificateValidation": true,
-			"authenticationType": "Anonymous",
-			"authHeaders": {
-				"apiKey": {
-					"type": "SecureString",
-					"value": "**********"
-				}
-			}
+			"authenticationType": "Anonymous"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
