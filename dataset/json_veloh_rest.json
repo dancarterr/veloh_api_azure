@@ -11,8 +11,8 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "veloh_extract.json",
-				"folderPath": "restveloh",
-				"container": "sfeirstorage"
+				"folderPath": "rawdata",
+				"container": "restveloh"
 			}
 		},
 		"schema": {}
