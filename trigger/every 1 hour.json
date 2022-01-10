@@ -1,0 +1,25 @@
+{
+	"name": "every 1 hour",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "veloh_rawdata_extract",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2022-01-10T14:00:00Z",
+				"endTime": "2022-01-31T13:56:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
