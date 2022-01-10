@@ -10,7 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "veloh_extract.json",
+				"fileName": {
+					"value": "@concat('veloh_rawdata_ ',utcnow(),'.json')",
+					"type": "Expression"
+				},
 				"folderPath": "rawdata",
 				"container": "restveloh"
 			}
