@@ -1,0 +1,274 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-extract-veloh"
+		},
+		"blob_veloh_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'blob_veloh'"
+		},
+		"Veloh Rest API_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.jcdecaux.com/vls/v1/stations?apiKey=33a792c68888383c3eaa4b96a3c6678a798a9dd3"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Veloh Rest API')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('Veloh Rest API_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/blob_veloh')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('blob_veloh_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/json_veloh_rest')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "blob_veloh",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@concat('veloh_rawdata_ ',utcnow(),'.json')",
+							"type": "Expression"
+						},
+						"folderPath": "rawdata",
+						"container": "restveloh"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/blob_veloh')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/veloh_api_rest_ressource')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Veloh Rest API",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Veloh Rest API')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/veloh_rawdata_extract')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Extract data from API",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings",
+									"filePattern": "arrayOfObjects"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['number']"
+										},
+										"sink": {
+											"path": "$['number']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['contract_name']"
+										},
+										"sink": {
+											"path": "$['contract_name']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['name']"
+										},
+										"sink": {
+											"path": "$['name']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['address']"
+										},
+										"sink": {
+											"path": "$['address']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['position']['lat']"
+										},
+										"sink": {
+											"path": "$['position']['lat']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['position']['lng']"
+										},
+										"sink": {
+											"path": "$['position']['lng']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['banking']"
+										},
+										"sink": {
+											"path": "$['banking']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['bonus']"
+										},
+										"sink": {
+											"path": "$['bonus']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['bike_stands']"
+										},
+										"sink": {
+											"path": "$['bike_stands']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['available_bike_stands']"
+										},
+										"sink": {
+											"path": "$['available_bike_stands']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['available_bikes']"
+										},
+										"sink": {
+											"path": "$['available_bikes']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"path": "$['status']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['last_update']"
+										},
+										"sink": {
+											"path": "$['last_update']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "veloh_api_rest_ressource",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "json_veloh_rest",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/veloh_api_rest_ressource')]",
+				"[concat(variables('factoryId'), '/datasets/json_veloh_rest')]"
+			]
+		}
+	]
+}

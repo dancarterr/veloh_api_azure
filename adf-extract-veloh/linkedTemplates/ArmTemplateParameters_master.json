@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-extract-veloh"
+		},
+		"blob_veloh_connectionString": {
+			"value": ""
+		},
+		"Veloh Rest API_properties_typeProperties_url": {
+			"value": "https://api.jcdecaux.com/vls/v1/stations?apiKey=33a792c68888383c3eaa4b96a3c6678a798a9dd3"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
